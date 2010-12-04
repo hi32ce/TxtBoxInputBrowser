@@ -68,29 +68,37 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
     }
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
+		if (mWebView.equals(v) == false) return;
+		if (hasFocus != false) return; 
+		
 		WebView wv = (WebView)v;
 		HitTestResult result;
-		View temp;
+//		View temp;
 		result = wv.getHitTestResult();
 		if (result == null) return;
 		if (result.getType() == HitTestResult.EDIT_TEXT_TYPE) {
 			if (mIme.isActive()) {
-				temp = wv.getChildAt(0);
-				if (temp == null) return;
-				if (temp.onCheckIsTextEditor()) {
-					((EditText)temp).setText(new String("Hello world."));
-				}
+//				temp = wv.getChildAt(0);
+//				if (temp == null) return;
+//				if (temp.onCheckIsTextEditor()) {
+//					((EditText)temp).setText(new String("Hello world."));
+//				}
 //				((ControlableWebView)mWebView).mInputConnection.commitText("test", 1);
-				/*
 				mTextEditLayout.setVisibility(View.VISIBLE);
 				mWebView.setVisibility(View.INVISIBLE);
-				*/
 			}
 		}
 	}
 	@Override
 	public void onFinishInput(String string) {
 		// TODO Auto-generated method stub
+		View temp;
+
+		temp = mWebView.getChildAt(0);
+		if (temp == null) return;
+		if (temp.onCheckIsTextEditor()) {
+			((EditText)temp).setText(string);
+		}
 		mWebView.setVisibility(View.VISIBLE);
 		mTextEditLayout.setVisibility(View.INVISIBLE);
 	}
