@@ -14,11 +14,10 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int EditText=0x7f050004;
+        public static final int EditText=0x7f050002;
         public static final int FinishButton=0x7f050003;
         public static final int MainFrame=0x7f050000;
-        public static final int TextEditLayout=0x7f050002;
-        public static final int wv=0x7f050001;
+        public static final int TextEditLayout=0x7f050001;
     }
     public static final class layout {
         public static final int txtboxinputbrowser_activity=0x7f030000;

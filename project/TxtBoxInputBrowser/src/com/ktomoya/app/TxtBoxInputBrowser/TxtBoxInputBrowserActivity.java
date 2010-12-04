@@ -1,7 +1,10 @@
 package com.ktomoya.app.TxtBoxInputBrowser;
 
+import com.ktomoya.app.TxtBoxInputBrowser.TextEditLayoutCompornent.OnFinishInputListener;
+
 import android.app.Activity;
 import android.content.Context;
+import android.inputmethodservice.InputMethodService;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,31 +12,37 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.webkit.WebView.HitTestResult;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChangeListener {
+public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChangeListener, OnFinishInputListener {
     /** Called when the activity is first created. */
 	private WebView mWebView;
 	private RelativeLayout mTextEditLayout;
 	private FrameLayout mFrameLayout;
     private InputMethodManager mIme;
+    private InputMethodService mImeService;
+    private TextEditLayoutCompornent mTextEditLayoutCompornent;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.txtboxinputbrowser_activity);
         mFrameLayout = (FrameLayout)findViewById(R.id.MainFrame);
-        mWebView = (WebView)findViewById(R.id.wv);
         mTextEditLayout = (RelativeLayout)findViewById(R.id.TextEditLayout);
+        mTextEditLayoutCompornent = new TextEditLayoutCompornent(findViewById(R.id.TextEditLayout));
+        mTextEditLayoutCompornent.setFinishInputListener(this);
         mIme = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-//        mWebView = new ControlableWebView(this);
+        mWebView = new ControlableWebView(this);
+//        mWebView = (WebView)findViewById(R.id.wv);
         mWebView.setWebViewClient(new WebClientView());
-    	mWebView.getSettings().setJavaScriptEnabled(true);
-    	mWebView.getSettings().setBuiltInZoomControls(true);
+        mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.setOnFocusChangeListener(this);
-    	mWebView.loadUrl("http://www.google.com/");
-//    	mFrameLayout.addView(mWebView);
+//        mWebView.loadUrl("http://www.google.com/");
+        mWebView.loadData("<body><input type=\"text\"/><br><inpet type=\"text\" /><br><input type=\"text\" /><br><input type=\"text\" /><br><input type=\"text\" /><br><input type=\"text\" /><br></body>", "text/html", "utf-8");
+        mFrameLayout.addView(mWebView);
     }
     @Override
     protected void onResume() {
@@ -61,12 +70,28 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
 	public void onFocusChange(View v, boolean hasFocus) {
 		WebView wv = (WebView)v;
 		HitTestResult result;
+		View temp;
 		result = wv.getHitTestResult();
-		if (result.getType()==HitTestResult.EDIT_TEXT_TYPE) {
+		if (result == null) return;
+		if (result.getType() == HitTestResult.EDIT_TEXT_TYPE) {
 			if (mIme.isActive()) {
+				temp = wv.getChildAt(0);
+				if (temp == null) return;
+				if (temp.onCheckIsTextEditor()) {
+					((EditText)temp).setText(new String("Hello world."));
+				}
+//				((ControlableWebView)mWebView).mInputConnection.commitText("test", 1);
+				/*
 				mTextEditLayout.setVisibility(View.VISIBLE);
 				mWebView.setVisibility(View.INVISIBLE);
+				*/
 			}
 		}
+	}
+	@Override
+	public void onFinishInput(String string) {
+		// TODO Auto-generated method stub
+		mWebView.setVisibility(View.VISIBLE);
+		mTextEditLayout.setVisibility(View.INVISIBLE);
 	}
 }

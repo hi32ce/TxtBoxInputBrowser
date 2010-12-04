@@ -6,13 +6,13 @@ import android.view.inputmethod.InputConnection;
 import android.webkit.WebView;
 
 public class ControlableWebView extends WebView {
+	public InputConnection mInputConnection;
 	public ControlableWebView(Context context) {
 		super(context);
 	}
 	@Override
 	public InputConnection onCreateInputConnection (EditorInfo outAttrs) {
-		InputConnection info;
-		info = super.onCreateInputConnection(outAttrs);
-		return info;
+		mInputConnection = super.onCreateInputConnection(outAttrs);
+		return mInputConnection;
 	}
 }
