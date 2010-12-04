@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<FrameLayout android:id="@+id/MainFrame"
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent" 
+	xmlns:android="http://schemas.android.com/apk/res/android" 
+	android:layout_gravity="fill" android:background="#FFFFFF">
+	<WebView android:id="@+id/wv" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		 android:background="#FFFFFF"/>
+
+	<RelativeLayout android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" 
+		android:id="@+id/TextEditLayout" 
+		android:visibility="gone">
+		<EditText android:layout_width="fill_parent" 
+			android:layout_alignParentTop="true" 
+			android:layout_height="wrap_content" 
+			android:layout_above="@+id/FinishButton" 
+			android:id="@+id/EditText" />
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_alignParentBottom="true" 
+			android:layout_alignTop="@+id/TextEditLayout" 
+			android:layout_centerInParent="true" 
+			android:id="@+id/FinishButton" 
+			android:text="@string/finish" />
+	</RelativeLayout>
+</FrameLayout>
