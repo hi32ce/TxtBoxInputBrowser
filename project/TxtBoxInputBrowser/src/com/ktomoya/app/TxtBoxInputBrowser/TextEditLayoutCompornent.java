@@ -8,8 +8,8 @@ import android.widget.EditText;
 public class TextEditLayoutCompornent implements OnClickListener {
 	private View mMyPearent;
 	private EditText mEditText;
-	
 	private OnFinishInputListener mFinishInputListener;
+	
 	public TextEditLayoutCompornent(View view) {
 		mMyPearent = view;
 		view.findViewById(R.id.FinishButton).setOnClickListener(this);

@@ -12,6 +12,7 @@ public class ControlableWebView extends WebView {
 	}
 	@Override
 	public InputConnection onCreateInputConnection (EditorInfo outAttrs) {
+//		((TxtBoxInputBrowserActivity)getContext()).enableEditBox();
 		mInputConnection = super.onCreateInputConnection(outAttrs);
 		return mInputConnection;
 	}

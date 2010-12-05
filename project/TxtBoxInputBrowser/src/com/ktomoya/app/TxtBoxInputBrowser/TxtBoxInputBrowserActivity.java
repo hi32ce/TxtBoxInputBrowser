@@ -24,6 +24,7 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
     private InputMethodManager mIme;
     private InputMethodService mImeService;
     private TextEditLayoutCompornent mTextEditLayoutCompornent;
+    private boolean mEnableEditBox = true;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,15 +71,23 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
 	public void onFocusChange(View v, boolean hasFocus) {
 		if (mWebView.equals(v) == false) return;
 		if (hasFocus != false) return; 
+//		if (mEnableEditBox == false) {
+//			enableEditBox();
+//			return;
+//		}
 		
 		WebView wv = (WebView)v;
 		HitTestResult result;
-//		View temp;
+		View temp;
 		result = wv.getHitTestResult();
 		if (result == null) return;
 		if (result.getType() == HitTestResult.EDIT_TEXT_TYPE) {
-			if (mIme.isActive()) {
-//				temp = wv.getChildAt(0);
+			boolean layout_request;
+			boolean selected;
+			layout_request = mWebView.isLayoutRequested();
+			selected = mWebView.isSelected();
+			if (mIme.isActive(mWebView)) {
+				temp = wv.getChildAt(0);
 //				if (temp == null) return;
 //				if (temp.onCheckIsTextEditor()) {
 //					((EditText)temp).setText(new String("Hello world."));
@@ -86,6 +95,7 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
 //				((ControlableWebView)mWebView).mInputConnection.commitText("test", 1);
 				mTextEditLayout.setVisibility(View.VISIBLE);
 				mWebView.setVisibility(View.INVISIBLE);
+//				this.disableEditBox();
 			}
 		}
 	}
@@ -99,7 +109,17 @@ public class TxtBoxInputBrowserActivity extends Activity implements OnFocusChang
 		if (temp.onCheckIsTextEditor()) {
 			((EditText)temp).setText(string);
 		}
+		mIme.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
 		mWebView.setVisibility(View.VISIBLE);
 		mTextEditLayout.setVisibility(View.INVISIBLE);
+		mWebView.setSelected(false);
+//		mIme.hideSoftInputFromWindow(mWebView.getWindowToken(), 0);
+//		disableEditBox();
+	}
+	public void enableEditBox() {
+		this.mEnableEditBox= true;
+	}
+	public void disableEditBox() {
+		this.mEnableEditBox = false;
 	}
 }
